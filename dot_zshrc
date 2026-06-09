@@ -76,7 +76,7 @@ if command -v bat > /dev/null ; then
 fi
 
 if command -v lsd > /dev/null ; then
-  alias ls="lsd"
+  alias ls="lsd --icon-theme unicode"
   alias ll="ls -lgh"
   alias la='ls -lathr'
   alias lla='ls -lgha'
