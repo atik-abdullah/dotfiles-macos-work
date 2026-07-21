@@ -6,3 +6,6 @@ lsd = "latest"
 ripgrep = "latest"
 neovim = "latest"
 node = "latest"
+
+# Needed for Homelab OS course
+direnv = "latest"
