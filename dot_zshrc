@@ -5,6 +5,9 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=100000
 SAVEHIST=100000
 
+setopt HIST_IGNORE_SPACE    # Don't save when prefixed with space
+setopt HIST_IGNORE_DUPS     # Don't save duplicate lines
+setopt SHARE_HISTORY        # Share history between sessions
 
 # ~~~~~~~~~~~~~~~ Prompt ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -47,6 +50,12 @@ fi
 
 # ~~~~~~~~~~~~~~~~ Direnv ~~~~~~~~~~~~~~~~
 
+
+# Direnv must be loaded after mise, because direnv is installed by mise.
+# mise first makes ~/.local/share/mise tools available in PATH.
+# Then direnv hooks into zsh so .envrc files are loaded automatically
+# when entering project directories.
+
 if command -v direnv > /dev/null ; then
   eval "$(direnv hook zsh)"
 fi
@@ -54,16 +63,26 @@ fi
 # ~~~~~~~~~~~~~~~ Completion ~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit  
+compinit -u
+
+zstyle ':completion:*' menu select
 
 if command -v fzf > /dev/null ; then
   source <(fzf --zsh)
 fi
 
+if command -v k3d > /dev/null ; then
+  source <(k3d completion zsh)
+fi
+
+if command -v kubectl > /dev/null ; then
+  source <(kubectl completion zsh)
+fi
+
 if command -v flux > /dev/null ; then
   source <(flux completion zsh)
 fi
-
 
 if command -v mise > /dev/null ; then
   source <(mise completion zsh)
@@ -74,8 +93,6 @@ fi
 
 
 alias v=nvim
-alias gp="git pull"
-alias lg=lazygit
 
 if command -v bat > /dev/null ; then
   alias cat="bat"
@@ -89,4 +106,32 @@ if command -v lsd > /dev/null ; then
   alias lt='ls --tree'
 fi
 
+# finds all files recursively and sorts by last modification, ignore hidden files
+alias lastmod='find . -type f -not -path "*/\.*" -exec ls -lrt {} +'
 
+alias t='tmux'
+alias e='exit'
+
+alias syu='sudo pacman -Syu'
+
+# Azure
+alias sub='az account set -s'
+
+# Git
+alias gp='git pull'
+alias gs='git status'
+alias lg='lazygit'
+
+# Kubernetes
+
+alias k='kubectl'
+
+alias kgp='kubectl get pods'
+alias kc='kubectx'
+alias kn='kubens'
+
+alias fgk='flux get kustomizations'
+
+# Devpod
+
+alias ds='devpod ssh'
