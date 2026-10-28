@@ -56,8 +56,9 @@ fi
 # Then direnv hooks into zsh so .envrc files are loaded automatically
 # when entering project directories.
 
-if command -v direnv > /dev/null ; then
-  eval "$(direnv hook zsh)"
+if command -v mise >/dev/null 2>&1 &&
+   mise which direnv >/dev/null 2>&1; then
+    eval "$(direnv hook zsh)"
 fi
 
 # ~~~~~~~~~~~~~~~ Completion ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -76,12 +77,14 @@ if command -v k3d > /dev/null ; then
   source <(k3d completion zsh)
 fi
 
-if command -v kubectl > /dev/null ; then
-  source <(kubectl completion zsh)
+if command -v mise >/dev/null 2>&1 &&
+   mise which kubectl >/dev/null 2>&1; then
+    source <(kubectl completion zsh)
 fi
 
-if command -v flux > /dev/null ; then
-  source <(flux completion zsh)
+if command -v mise >/dev/null 2>&1 &&
+   mise which flux2 >/dev/null 2>&1; then
+    source <(flux completion zsh)
 fi
 
 if command -v mise > /dev/null ; then
